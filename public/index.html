@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="test.css">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <title>Document</title>
+</head>
+<body>
+    <div> 
+        <h1 class="h1"> NFT'S NEWS</h1>
+        <style>
+      
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: blanchedalmond;
+  color: black;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  float: right;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: bisque;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+
+
+<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+
+<div id="id01" class="modal">
+  
+  <form class="modal-content animate" action="/action_page.php" method="post">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      
+    </div>
+
+    <div class="container">
+      <label for="uname"><b>Nom:</b></label>
+      <input type="text" placeholder="Entrer votre nom" name="uname" required>
+
+      <label for="psw"><b>Mot de passe:</b></label>
+      <input type="password" placeholder="Entrer votre mot de pass" name="psw" required>
+        
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+
+    
+  </form>
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+    </div>
+    <style>
+      
+
+        /* Full-width input fields */
+        input[type=text], input[type=password] {
+          width: 100%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          display: inline-block;
+          border: 1px solid #ccc;
+          box-sizing: border-box;
+        }
+        
+        /* Set a style for all buttons */
+        button {
+          background-color: blanchedalmond;
+          color: black;
+          padding: 14px 20px;
+          margin: 8px 0;
+          border: none;
+          cursor: pointer;
+          width: 100%;
+          float: right;
+        }
+        
+        button:hover {
+          opacity: 0.8;
+        }
+        
+        /* Extra styles for the cancel button */
+    
+        
+        /* Center the image and position the close button */
+       
+        
+        
+       
+        
+        span.psw {
+          float: right;
+          padding-top: 16px;
+        }
+        
+        /* The Modal (background) */
+        
+        
+        /* Modal Content/Box */
+        .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+          border: 1px solid #888;
+          width: 80%; /* Could be more or less, depending on screen size */
+          height: 80%;
+        }
+        
+        /* The Close Button (x) */
+        .close {
+          position: absolute;
+          right: 25px;
+          top: 0;
+          color: #000;
+          font-size: 35px;
+          font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+          color: red;
+          cursor: pointer;
+        }
+        
+        /* Add Zoom Animation */
+        
+        
+        @-webkit-keyframes animatezoom {
+          from {-webkit-transform: scale(0)} 
+          to {-webkit-transform: scale(1)}
+        }
+          
+        @keyframes animatezoom {
+          from {transform: scale(0)} 
+          to {transform: scale(1)}
+        }
+        
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+          span.psw {
+             display: block;
+             float: none;
+          }
+          .cancelbtn {
+             width: 100%;
+          }
+        }
+        </style>
+        </head>
+        <body>
+        
+        
+        
+            <div>
+                <button onclick="document.getElementById('id02').style.display='block'" style="width:auto;">S'inscrire</button>
+        
+        <div id="id02" class="modal">
+          
+          <form class="modal-content animate" action="/action_page.php" method="post">
+            <div class="imgcontainer">
+              <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+              
+            </div>
+        
+            <div class="container">
+              <label for="uname"><b>Nom:</b></label>
+              <input type="text" placeholder="Entrer votre nom" name="uname" required>
+        
+              <label for="uname"><b>Prenom:</b></label>
+              <input type="text" placeholder="Entrer votre prenom" name="uprn" required>
+        
+              <label for="psw"><b>Email:</b></label>
+              <input type="password" placeholder="Entrer votre mot de passe" name="mail" required>
+        
+              <label for="psw"><b>Mot de passe:</b></label>
+              <input type="password" placeholder="Entrer votre mot de passe" name="psw" required>
+                
+              <button type="submit">S'inscrire</button>
+              
+            </div>
+        
+          </form>
+        </div>
+        
+        <script>
+        // Get the modal
+        var modal = document.getElementById('id02');
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        </script>
+    
+
+    <div>
+
+    </div>
+    <br><br><br><br>
+    <div class="topnav">
+        <a class="active" href="./tesy edhjz.html">Home</a>
+        <a href="./page2USER.html">Ranck a project</a>
+        <a href="#contact">Contact us</a>
+
+    </div>
+
+    <div class="vol23"> 
+        <!--volet2-->
+         <div class="methode">
+            <div class="vertical-menu">
+              <h3 style="text-align: center;">Filter par:</h3>
+                <a href="#" class="active"> Network</a>
+                <a href="#">all</a>
+                <a href="#">Sol</a>
+                <a href="#">Eth</a>
+                <a href="#">Avax</a>
+                <a href="#">ADA</a>
+                <a href="#">Matic</a>
+                <a href="#">BNB</a>
+                <a href="#" class="active"> Date</a>
+                <input type="date">
+                <h3 style="text-align: center;">Trier par:</h3>
+                <a href="#">Supply</a>
+                <a href="#">Price number</a>
+              </div>
+        </div>
+
+        <div class="projets">
+            <form class="example" action="/action_page.php">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><i class="fa fa-search"></i></button>
+              </form>
+
+            <br><br><br>
+
+            <div class="vole2">
+                <div class="a-1" bordr="1" > 
+                    <div class="a-2"><a href="" ><div><img src="" alt=""></div><ul style= "list-style-type: none"><li></li><li></li><li></li><li></li></ul></a></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div>
+                    <div class="a-2"></div> 
+                
+                
+                </div>
+            </div>
+              
+            
+        </div>
+        </div>
+
+        
+        <div class="footer" style="text-align: center;">
+            <a href="https://upcomingnft.art/" class="links" title="go to another website">upcomingnft</a>
+            <a href="https://upcomingnft.art/" class="links" title="go to another website">upcomingnft</a>
+            <a href="https://upcomingnft.art/" class="links" title="go to another website">upcomingnft</a>
+      
+            <h6 id="contact" style="color: white;">TELE:0622235308</h6></a>
+              <br><br>
+            <a href="https://www.facebook.com/Emirates/" title="go to page facebook"><img src="facebook.png" class="rounded-circle" 
+              style="width:20px;height:20px; margin-right: 2px;float: left;"></a>
+              <a href="mailto:arzamyasmine@gmail.com" target="_blank" class="links" ><img src="gmail.png" class="rounded-circle"
+                title="go to our e-mail"
+                style="width:20px;height:20px; margin-right: 2px;float: left;">
+              </a>
+          </div> 
+
+    
+        </div>
+      
+     
+      
+</body>
+</html>
