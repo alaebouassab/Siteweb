@@ -4,7 +4,6 @@ import VueRouter from 'vue-router';
 import Vue from "vue";
 import App from "./app.vue";
 import home from './components/home.vue';
-import login from './components/login.vue';
 import register from './components/register.vue';
 import RanckProject from './components/RanckProject.vue';
 import show from './components/show.vue';
@@ -16,12 +15,12 @@ const routes = [
     { path: '/', component: home },
     { path: '/register', component: register },
     { path: '/RanckProject', component: RanckProject },
-    { path: '/show', component: show },
+    { path: '/show/:nftId', component: show, name: 'showDetails'},
 
 ];
 
 const router = new VueRouter({
-    // mode: 'history',
+    mode: 'history',
     routes
 });
 // Create Vue Object

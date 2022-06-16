@@ -2167,6 +2167,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _components_login_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/login.vue */ "./resources/js/components/login.vue");
 //
 //
 //
@@ -2189,19 +2190,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-// import home from "./components/home.vue";
-// import login from "./components/login.vue";
-// import register from "./components/register.vue";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      message: "NFT Project",
-      user: null
+      user: null,
+      isloginactive: false
     };
   },
-  components: {// login,
-    // register,
-    // home
+  components: {
+    login: _components_login_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   created: function created() {
     this.getUser();
@@ -2348,8 +2361,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'RanckProject'
+  name: "RanckProject",
+  data: function data() {
+    return {
+      nfts: [],
+      nftsFilter: []
+    };
+  },
+  methods: {
+    laodNfts: function laodNfts() {
+      var _this = this;
+
+      axios.get("http://127.0.0.1:8001/api/nfts").then(function (data) {
+        _this.nfts = data.data;
+        _this.nftsFilter = _this.nfts;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
+  },
+  created: function created() {
+    this.laodNfts();
+  }
 });
 
 /***/ }),
@@ -2365,7 +2412,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _login_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./login.vue */ "./resources/js/components/login.vue");
 //
 //
 //
@@ -2471,16 +2517,96 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'home',
+  name: "home",
   data: function data() {
     return {
-      isloginactive: false
+      search: "",
+      // isloginactive: false,
+      projects: [],
+      filterProjects: [],
+      networks: ["SOL", "ETH", "AVAX", "ADA", "MATIC", "BNB"]
     };
   },
-  components: {
-    login: _login_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  watch: {
+    search: function search(val) {
+      if (val.length == 0) {
+        this.loadProjects();
+      }
+    }
+  },
+  methods: {
+    filter: function filter(key) {
+      this.filterProjects = this.projects.filter(function (project) {
+        return project.network === key;
+      });
+    },
+    clearFilter: function clearFilter() {
+      this.filterProjects = this.projects;
+    },
+    orderBySupply: function orderBySupply() {
+      this.filterProjects = this.projects.sort(function (project_a, project_b) {
+        return project_a.supply - project_b.supply;
+      });
+    },
+    orderByPrice: function orderByPrice() {
+      this.filterProjects = this.projects.sort(function (project_a, project_b) {
+        return project_a.price_number - project_b.price_number;
+      });
+    },
+    searchFilter: function searchFilter() {
+      var _this = this;
+
+      if (this.search.length == 0) {
+        alert("Please add search keyword");
+        return;
+      }
+
+      axios.post("http://127.0.0.1:8001/api/projects/search", {
+        search: this.search
+      }).then(function (projects) {
+        _this.projects = projects.data;
+        _this.filterProjects = _this.projects;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    loadProjects: function loadProjects() {
+      var _this2 = this;
+
+      axios.get("http://127.0.0.1:8001/api/projects/all").then(function (projects) {
+        _this2.projects = projects.data;
+        _this2.filterProjects = _this2.projects;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
+  },
+  // components: {
+  //     login,
+  // },
+  created: function created() {
+    this.loadProjects();
   }
 });
 
@@ -2523,12 +2649,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {};
   },
   props: {},
-  name: 'login'
+  name: "login"
 });
 
 /***/ }),
@@ -2698,8 +2834,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'show'
+  name: "show",
+  data: function data() {
+    return {
+      nftDetails: {}
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    var nftId = this.$route.params.nftId;
+    axios.get("http://127.0.0.1:8001/api/nfts/details/" + nftId).then(function (data) {
+      _this.nftDetails = data.data;
+    })["catch"](function (err) {
+      console.log(err);
+    });
+  }
 });
 
 /***/ }),
@@ -2714,14 +2896,13 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var babel_polyfill__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! babel-polyfill */ "./node_modules/babel-polyfill/lib/index.js");
 /* harmony import */ var babel_polyfill__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(babel_polyfill__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _app_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.vue */ "./resources/js/app.vue");
 /* harmony import */ var _components_home_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/home.vue */ "./resources/js/components/home.vue");
-/* harmony import */ var _components_login_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/login.vue */ "./resources/js/components/login.vue");
-/* harmony import */ var _components_register_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/register.vue */ "./resources/js/components/register.vue");
-/* harmony import */ var _components_RanckProject_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/RanckProject.vue */ "./resources/js/components/RanckProject.vue");
-/* harmony import */ var _components_show_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/show.vue */ "./resources/js/components/show.vue");
+/* harmony import */ var _components_register_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/register.vue */ "./resources/js/components/register.vue");
+/* harmony import */ var _components_RanckProject_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/RanckProject.vue */ "./resources/js/components/RanckProject.vue");
+/* harmony import */ var _components_show_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/show.vue */ "./resources/js/components/show.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -2732,27 +2913,27 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-
-vue__WEBPACK_IMPORTED_MODULE_7__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_8__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_6__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_7__["default"]);
 var routes = [{
   path: '/',
   component: _components_home_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
 }, {
   path: '/register',
-  component: _components_register_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+  component: _components_register_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
 }, {
   path: '/RanckProject',
-  component: _components_RanckProject_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+  component: _components_RanckProject_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
 }, {
-  path: '/show',
-  component: _components_show_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+  path: '/show/:nftId',
+  component: _components_show_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+  name: 'showDetails'
 }];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_8__["default"]({
-  // mode: 'history',
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__["default"]({
+  mode: 'history',
   routes: routes
 }); // Create Vue Object
 
-new vue__WEBPACK_IMPORTED_MODULE_7__["default"]({
+new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
   render: function render(h) {
     return h(_app_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
   },
@@ -12783,7 +12964,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.topnav {\r\n  overflow: hidden;\r\n  background-color: #333;\r\n  position: relative;\r\n  top: 160px;\n}\n.econ{\r\n    padding: 5;\n}\n.topnav a {\r\n  float: left;\r\n  color: #f2f2f2;\r\n  text-align: center;\r\n  padding: 14px 16px;\r\n  text-decoration: none;\r\n  font-size: 17px;\n}\n.topnav a:hover {\r\n  background-color: #ddd;\r\n  color: black;\n}\n.topnav a.active {\r\n  background-color: gray;\r\n  color: white;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.topnav {\r\n    overflow: hidden;\r\n    background-color: #333;\r\n    padding: 10px;\r\n    /* position: relative;\r\n    top: 160px; */\n}\r\n/* .econ {\r\n    padding: 5px;\r\n} */\n.topnav a {\r\n    float: left;\r\n    color: #f2f2f2;\r\n    text-align: center;\r\n    padding: 14px 16px;\r\n    text-decoration: none;\r\n    font-size: 17px;\n}\n.topnav a:hover {\r\n    background-color: #ddd;\r\n    color: black;\n}\n.topnav a.active {\r\n    background-color: gray;\r\n    color: white;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12807,7 +12988,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.a-4{\r\n    padding-top: 140px;\n}\n.botona{\r\n  width: 100%;\n}\r\n\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.a-4 {\r\n    padding-top: 140px;\n}\n.botona {\r\n    width: 100%;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12831,7 +13012,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nbody {\r\n  font-family: Arial;\n}\n* {\r\n  box-sizing: border-box;\n}\nform.example input[type=text] {\r\n  padding: 10px;\r\n  font-size: 17px;\r\n  border: 1px solid grey;\r\n  float: left;\r\n  width: 80%;\r\n  background: #f1f1f1;\n}\nform.example button {\r\n  float: left;\r\n  width: 20%;\r\n  padding: 10px;\r\n  background: #2196F3;\r\n  color: white;\r\n  font-size: 17px;\r\n  border: 1px solid grey;\r\n  border-left: none;\r\n  cursor: pointer;\n}\nform.example button:hover {\r\n  background: #0b7dda;\n}\nform.example::after {\r\n  content: \"\";\r\n  clear: both;\r\n  display: table;\n}\n.button1{\r\n\r\n  background-color: blanchedalmond;\r\n  color: black;\r\n  padding: 17px 30px;\r\n  margin: -18px 0;\r\n  border: none;\r\n  cursor: pointer;\r\n  width: 100%;\r\n  float: right;\n}\nbutton:hover {\r\n  opacity: 0.8;\n}\n.h1{\r\n  text-align: center  ;\r\n  color: black;\r\n  text-align: center;\n}\n.vol23{\r\n    background-color: grey;\r\n    height: 900px;\r\n    width: 100%;\r\n    padding: 10px;\r\n    display: table;\r\n    clear: both;\r\n    content: \"\";\n}\n.methode{\r\n    float: left;\r\n    height: auto;\r\n    width: 25%;\r\n    background-color: white;\r\n    margin-top: 123px;\n}\n.projets{\r\n  float: left;\r\n  height: 100%;\r\n  width: 75%;\r\n  padding-left: 2%;\n}\n.vertical-menu a {\r\n  background-color: #eee;\r\n  color: black;\r\n  display: block;\r\n  padding: 12px;\r\n  text-decoration: none;\n}\n.vertical-menu a:hover {\r\n  background-color: #ccc;\n}\n.vertical-menu a.active {\r\n  background-color:slategray;\r\n  color: white;\n}\n.a-2{\r\n  border:1px;\r\n  float:left;\r\n  width : 20%;\r\n\r\n  height:200px;\r\n  background-color: white;\r\n  margin-right: 5px;\r\n  margin-bottom: 10px;\r\n  margin-left: 5px;\r\n  padding: 5px\n}\n.footer{\r\n\r\n  margin-top: 4px;\r\n  padding: 10px;\r\n  height: 100px;\r\n  background-color: #0b7dda;\n}\n.a-2{ \r\n  background-color: #0b7dda;\n}\nth{\r\n background-color: rgb(136, 128, 224);\r\n color: #0e0d0d;\r\n width: 35%;\r\n height: 12%;\n}\ntd{\r\n height: 12%;\r\n border: 1px solid #dddddd;\n} \r\n\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nbody {\r\n    font-family: Arial;\n}\n* {\r\n    box-sizing: border-box;\n}\r\n\r\n/* .signin {\r\n    display: flex;\r\n    justify-content: right;\r\n    align-items: center;\r\n    flex-direction: row;\r\n    color: black;\r\n    padding: 17px 30px;\r\n    margin: -18px 0;\r\n} */\n.signin > a {\r\n    margin-right: 10px;\r\n    cursor: pointer;\r\n    text-decoration: none;\n}\nform.example input[type=\"text\"] {\r\n    padding: 10px;\r\n    font-size: 17px;\r\n    \r\n    float: left;\r\n    width: 30%;\r\n    margin-top:8px ;\r\n    margin-left:200px ;\r\n    background: #f1f1f1;\n}\nform.example button {\r\n    float: left;\r\n    width: 5%;\r\n    height: 10%;\r\n    padding: 10px;\r\n    background: black;\r\n    color: white;\r\n    font-size: 17px;\r\n    border-left: none;\r\n    cursor: pointer;\n}\nform.example button:hover {\r\n    background: #9f9a9a;\n}\nform.example::after {\r\n    content: \"\";\r\n    clear: both;\r\n    display: table;\n}\n.button1 {\r\n    background-color: blanchedalmond;\r\n    color: black;\r\n    padding: 17px 30px;\r\n    margin: -18px 0;\r\n    border: none;\r\n    cursor: pointer;\r\n    width: 100%;\r\n    float: right;\n}\nbutton:hover {\r\n    opacity: 0.8;\n}\n.h1 {\r\n    background-color: rgb(189, 192, 230);\r\n    text-align: center;\r\n    color: black;\r\n    text-align: center;\n}\n.vol23 {\r\n     background-color: rgb(189, 192, 230);\r\n    height: 900px;\r\n    width: 100%;\r\n    padding: 10px;\r\n    display: table;\r\n    clear: both;\r\n    content: \"\";\n}\n.vole2 {\r\n    display: flex;\r\n    flex-direction: row;\r\n    flex-wrap: wrap;\r\n    flex-basis: 200px;\r\n    justify-content: center;\r\n    align-items: center;\n}\n.methode {\r\n    float: left;\r\n    height: auto;\r\n    width: 25%;\r\n    background-color: white;\r\n    margin-top: 123px;\n}\n.projets {\r\n    float: left;\r\n    height: 100%;\r\n    width: 75%;\r\n    padding-left: 2%;\n}\n.vertical-menu a {\r\n    background-color: #eee;\r\n    color: black;\r\n    display: block;\r\n    padding: 12px;\r\n    text-decoration: none;\n}\n.vertical-menu a:hover {\r\n    background-color: #ccc;\n}\n.vertical-menu a.active {\r\n    background-color: slategray;\r\n    color: white;\n}\n.a-2 {\r\n    border: 1px;\r\n    float: left;\r\n    background-color: white;\r\n    margin-right: 5px;\r\n    margin-bottom: 10px;\r\n    margin-left: 5px;\r\n    padding: 5px;\n}\n.footer {\r\n    margin-top: 4px;\r\n    padding: 10px;\r\n    height: 100px;\r\n    background-color: #0b7dda;\n}\n.a-2 {\r\n    background-color: #0b7dda;\n}\nth {\r\n    background-color: rgb(136, 128, 224);\r\n    color: #0e0d0d;\r\n    width: 35%;\r\n    height: 12%;\n}\ntd {\r\n    height: 12%;\r\n    border: 1px solid #dddddd;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12855,7 +13036,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nsection{\r\n  position:relative;\r\n  top:150px;\n}\n.login-title {\r\n    color: rgb(3, 0, 10);\n}\ninput[type=text], input[type=password] {\r\n          width: 100%;\r\n          padding: 12px 20px;\r\n          margin: 8px 0;\r\n          display: inline-block;\r\n          border: 1px solid #ccc;\r\n          box-sizing: border-box;\n}\r\n        \r\n        /* Set a style for all buttons */\n.button {\r\n          background-color: rgb(7, 86, 23);\r\n          color: black;\r\n          padding: 14px 20px;\r\n          margin: 8px 0;\r\n          border: none;\r\n          cursor: pointer;\r\n          width: 100%;\r\n          float: right;\n}\nbutton:hover {\r\n          opacity: 0.8;\n}\nspan.psw {\r\n          float: right;\r\n          padding-top: 16px;\n}\n.modal-content {\r\n          background-color: #fefefe;\r\n          margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */\r\n          border: 1px solid #888;\r\n          width: 80%; /* Could be more or less, depending on screen size */\r\n          height: 80%;\n}\r\n        \r\n        /* The Close Button (x) */\n.close {\r\n          position: absolute;\r\n          right: 25px;\r\n          top: 0;\r\n          color: #000;\r\n          font-size: 35px;\r\n          font-weight: bold;\n}\n.close:hover,\r\n        .close:focus {\r\n          color: red;\r\n          cursor: pointer;\n} \r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.login {\r\n    color: rgb(3, 0, 10);\r\n    position: fixed;\r\n    top: 50%;\r\n    width: 70%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\ninput[type=\"text\"],\r\ninput[type=\"password\"] {\r\n    width: 100%;\r\n    padding: 12px 20px;\r\n    margin: 8px 0;\r\n    display: inline-block;\r\n    border: 1px solid #ccc;\r\n    box-sizing: border-box;\n}\r\n\r\n/* Set a style for all buttons */\n.loginButton {\r\n    background-color: rgb(7, 86, 23);\r\n    color: #fff;\r\n    padding: 14px 20px;\r\n    margin: 8px 0;\r\n    border: none;\r\n    cursor: pointer;\r\n    width: 100%;\r\n    float: right;\n}\n.loginButton:hover {\r\n    opacity: 0.8;\n}\nspan.psw {\r\n    float: right;\r\n    padding-top: 16px;\n}\n.modal-content {\r\n    background-color: #fefefe;\r\n    border: 1px solid #888;\n}\r\n\r\n/* The Close Button (x) */\n.close {\r\n    position: absolute;\r\n    right: 4px;\r\n    top: -7px;\r\n    color: #000;\r\n    font-size: 35px;\r\n    font-weight: bold;\n}\n.close:hover,\r\n.close:focus {\r\n    color: red;\r\n    cursor: pointer;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12903,7 +13084,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vol4{\n   float: left;\n   height: 50%;\n   width: 35%;\n   background-color: rgb(136, 128, 224);\n   margin-top : 12%\n}\n.vol5{\n margin-top: 100px;  \n float: left;\n height: 100%;\n width: 65%;\n padding-left: 2%;\n}\n.vol45{\n   display: table;\n   clear: both;\n   content: \"\";\n   background-color: grey;\n   height: 900px;\n   width: 100%;\n   /* padding: 10px; */\n}\nth{\n  background-color: rgb(136, 128, 224);\n  color: #0e0d0d;\n  width: 35%;\n  height: 12%;\n}\ntd{\n  height: 12%;\n  border: 1px solid #dddddd;\n}\ntable {\n font-family: arial, sans-serif;\n border-collapse: collapse;\n height: 50%;\n margin-top: 12px;\n margin-left: auto;\n margin-right: auto;\n background-color: rgba(252, 252, 252, 0.914);\n width:70%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.vol4 {\r\n    float: left;\r\n    height: 50%;\r\n    width: 35%;\r\n    background-color: rgb(136, 128, 224);\r\n    margin-top: 12%;\n}\n.vol5 {\r\n    margin-top: 100px;\r\n    float: left;\r\n    height: 100%;\r\n    width: 65%;\r\n    padding-left: 2%;\n}\n.vol45 {\r\n    display: table;\r\n    clear: both;\r\n    content: \"\";\r\n    background-color: grey;\r\n    height: 900px;\r\n    width: 100%;\r\n    /* padding: 10px; */\n}\nth {\r\n    background-color: rgb(136, 128, 224);\r\n    color: #0e0d0d;\r\n    width: 35%;\r\n    height: 12%;\n}\ntd {\r\n    height: 12%;\r\n    border: 1px solid #dddddd;\n}\ntable {\r\n    font-family: arial, sans-serif;\r\n    border-collapse: collapse;\r\n    height: 50%;\r\n    margin-top: 12px;\r\n    margin-left: auto;\r\n    margin-right: auto;\r\n    background-color: rgba(252, 252, 252, 0.914);\r\n    width: 70%;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32155,6 +32336,26 @@ var render = function () {
         "div",
         { staticClass: "topnav" },
         [
+          _c(
+            "a",
+            {
+              staticClass: "d-inline-block",
+              staticStyle: { float: "right" },
+              on: {
+                click: function ($event) {
+                  _vm.isloginactive = !_vm.isloginactive
+                },
+              },
+            },
+            [_vm._v("\n            Login\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            { staticStyle: { float: "right" }, attrs: { to: "/register" } },
+            [_vm._v("inscrire")]
+          ),
+          _vm._v(" "),
           _c("router-link", { attrs: { to: "/" } }, [
             _c("img", {
               staticClass: "econ",
@@ -32171,8 +32372,58 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("a", { attrs: { href: "#contact" } }, [_vm._v("Contact us")]),
+          _vm._v(" "),
+          _c("form", { staticClass: "example" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.search,
+                  expression: "search",
+                },
+              ],
+              attrs: { type: "text", placeholder: "Search..", name: "search" },
+              domProps: { value: _vm.search },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.search = $event.target.value
+                },
+              },
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                attrs: { type: "submit" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    $event.stopPropagation()
+                    return _vm.searchFilter()
+                  },
+                },
+              },
+              [_c("i", { staticClass: "fa fa-search" })]
+            ),
+          ]),
+          _vm._v(" "),
+          _vm.isloginactive
+            ? [
+                _c("login", {
+                  on: {
+                    close: function ($event) {
+                      _vm.isloginactive = false
+                    },
+                  },
+                }),
+              ]
+            : _vm._e(),
         ],
-        1
+        2
       ),
       _vm._v(" "),
       _c("router-view"),
@@ -32219,194 +32470,52 @@ var render = function () {
         _c("br"),
         _vm._v(" "),
         _c("div", { staticClass: "vole2" }, [
-          _c("div", { staticClass: "a-1", attrs: { bordr: "1" } }, [
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "a-2" },
-              [
-                _c("router-link", { attrs: { to: "/show" } }, [
-                  _c("div", { staticClass: "a-4" }, [
-                    _c(
-                      "button",
-                      { staticClass: "botona", attrs: { type: "button" } },
-                      [_vm._v("Show more")]
-                    ),
-                  ]),
-                ]),
-              ],
-              1
-            ),
-          ]),
+          _c(
+            "div",
+            { staticClass: "a-1", attrs: { bordr: "1" } },
+            _vm._l(_vm.nftsFilter, function (nft, index) {
+              return _c(
+                "div",
+                { key: index, staticClass: "a-2" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      attrs: {
+                        to: {
+                          name: "showDetails",
+                          params: { nftId: +nft.id },
+                        },
+                      },
+                    },
+                    [
+                      _c("div", { staticClass: "a-4" }, [
+                        _c("img", {
+                          attrs: {
+                            src: nft.image,
+                            width: "150",
+                            height: "150",
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          { staticClass: "botona", attrs: { type: "button" } },
+                          [
+                            _vm._v(
+                              "\n                                    Show more\n                                "
+                            ),
+                          ]
+                        ),
+                      ]),
+                    ]
+                  ),
+                ],
+                1
+              )
+            }),
+            0
+          ),
         ]),
       ]),
     ]),
@@ -32419,7 +32528,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", { staticClass: "h1" }, [_vm._v(" NFT'S NEWS")])])
+    return _c("div", [_c("h1", { staticClass: "h1" }, [_vm._v("NFT'S NEWS")])])
   },
   function () {
     var _vm = this
@@ -32587,184 +32696,131 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h1", { staticClass: "h1" }, [_vm._v(" NFT'S NEWS")]),
+  return _c("div", [
+    _c("div", { staticClass: "vol23" }, [
+      _c("h1", { staticClass: "h1" }, [_vm._v("NFT'S NEWS")]),
       _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "button1",
-          on: {
-            click: function ($event) {
-              _vm.isloginactive = !_vm.isloginactive
-            },
-          },
-        },
-        [_vm._v("Login")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        [
-          _c("router-link", { attrs: { to: "/register" } }, [
+      _c("div", { staticClass: "methode" }, [
+        _c(
+          "div",
+          { staticClass: "vertical-menu" },
+          [
+            _c("h3", { staticStyle: { "text-align": "center" } }, [
+              _vm._v("Filter par:"),
+            ]),
+            _vm._v(" "),
             _c(
-              "button",
+              "a",
               {
-                staticClass: "button1",
+                staticClass: "active",
+                attrs: { href: "#" },
                 on: {
                   click: function ($event) {
-                    _vm.isloginactive = !_vm.isloginactive
+                    $event.preventDefault()
                   },
                 },
               },
-              [_vm._v("S'inscrire")]
+              [_vm._v(" Network")]
             ),
-          ]),
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _vm.isloginactive ? _c("login") : _vm._e(),
-      _vm._v(" "),
-      _c("br"),
-      _c("br"),
-      _c("br"),
-      _c("br"),
-      _vm._v(" "),
-      _vm._m(0),
-      _vm._v(" "),
-      _vm._m(1),
-    ],
-    1
-  )
-}
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "vol23" }, [
-      _c("div", { staticClass: "methode" }, [
-        _c("div", { staticClass: "vertical-menu" }, [
-          _c("h3", { staticStyle: { "text-align": "center" } }, [
-            _vm._v("Filter par:"),
-          ]),
-          _vm._v(" "),
-          _c("a", { staticClass: "active", attrs: { href: "#" } }, [
-            _vm._v(" Network"),
-          ]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("all")]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Sol")]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Eth")]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Avax")]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("ADA")]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Matic")]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("BNB")]),
-          _vm._v(" "),
-          _c("a", { staticClass: "active", attrs: { href: "#" } }, [
-            _vm._v(" Date"),
-          ]),
-          _vm._v(" "),
-          _c("input", { attrs: { type: "date" } }),
-          _vm._v(" "),
-          _c("h3", { staticStyle: { "text-align": "center" } }, [
-            _vm._v("Trier par:"),
-          ]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Supply")]),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Price number")]),
-        ]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                attrs: { href: "#" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.clearFilter()
+                  },
+                },
+              },
+              [_vm._v("all")]
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.networks, function (network, index) {
+              return _c(
+                "a",
+                {
+                  key: index,
+                  attrs: { href: "#" },
+                  on: {
+                    click: function ($event) {
+                      return _vm.filter(network)
+                    },
+                  },
+                },
+                [_vm._v(_vm._s(network))]
+              )
+            }),
+            _vm._v(" "),
+            _c("a", { staticClass: "active", attrs: { href: "#" } }, [
+              _vm._v(" Date"),
+            ]),
+            _vm._v(" "),
+            _c("input", { attrs: { type: "date" } }),
+            _vm._v(" "),
+            _c("h3", { staticStyle: { "text-align": "center" } }, [
+              _vm._v("Trier par:"),
+            ]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                attrs: { href: "#" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.orderBySupply()
+                  },
+                },
+              },
+              [_vm._v("Supply")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                attrs: { href: "#" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.orderByPrice()
+                  },
+                },
+              },
+              [_vm._v("Price number")]
+            ),
+          ],
+          2
+        ),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "projets" }, [
-        _c("form", { staticClass: "example" }, [
-          _c("input", {
-            attrs: { type: "text", placeholder: "Search..", name: "search" },
-          }),
-          _vm._v(" "),
-          _c("button", { attrs: { type: "submit" } }, [
-            _c("i", { staticClass: "fa fa-search" }),
-          ]),
-        ]),
-        _vm._v(" "),
         _c("br"),
         _c("br"),
         _c("br"),
         _vm._v(" "),
         _c("div", { staticClass: "vole2" }, [
-          _c("div", { staticClass: "a-1", attrs: { bordr: "1" } }, [
-            _c("div", { staticClass: "a-2" }, [
-              _c("a", { attrs: { href: "" } }, [
-                _c("div", [_c("img", { attrs: { src: "", alt: "" } })]),
-                _c("ul", { staticStyle: { "list-style-type": "none" } }, [
-                  _c("li"),
-                  _c("li"),
-                  _c("li"),
-                  _c("li"),
-                ]),
-              ]),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "a-2" }),
-          ]),
+          _c(
+            "div",
+            { staticClass: "a-1", attrs: { bordr: "1" } },
+            _vm._l(_vm.filterProjects, function (project, index) {
+              return _c("div", { key: index, staticClass: "a-2" }, [
+                _c("img", {
+                  attrs: { src: project.image, width: "200", height: "200" },
+                }),
+              ])
+            }),
+            0
+          ),
         ]),
       ]),
-    ])
-  },
+    ]),
+    _vm._v(" "),
+    _vm._m(0),
+  ])
+}
+var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
@@ -32885,77 +32941,72 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("section", { staticClass: "login" }, [
+    _c(
+      "form",
+      { staticClass: "modal-content animate", attrs: { method: "post" } },
+      [
+        _c("div", { staticClass: "imgcontainer" }, [
+          _c(
+            "span",
+            {
+              staticClass: "close",
+              attrs: { title: "Close Modal" },
+              on: {
+                click: function ($event) {
+                  return _vm.$emit("close")
+                },
+              },
+            },
+            [_vm._v("×")]
+          ),
+        ]),
+        _vm._v(" "),
+        _vm._m(0),
+      ]
+    ),
+  ])
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "login-title" }, [
-      _c(
-        "form",
-        { staticClass: "modal-content animate", attrs: { method: "post" } },
-        [
-          _c("div", { staticClass: "imgcontainer" }, [
-            _c(
-              "span",
-              {
-                staticClass: "close",
-                attrs: {
-                  onclick:
-                    "document.getElementById('id01').style.display='none'",
-                  title: "Close Modal",
-                },
-              },
-              [_vm._v("×")]
-            ),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "container" }, [
-            _c("label", { attrs: { for: "uname" } }, [
-              _c("b", [_vm._v("Nom:")]),
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              attrs: {
-                type: "text",
-                placeholder: "Entrer votre nom",
-                name: "uname",
-                required: "",
-              },
-            }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "psw" } }, [
-              _c("b", [_vm._v("Mot de passe:")]),
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              attrs: {
-                type: "password",
-                placeholder: "Entrer votre mot de pass",
-                name: "psw",
-                required: "",
-              },
-            }),
-            _vm._v(" "),
-            _c("button", { staticClass: "button", attrs: { type: "submit" } }, [
-              _vm._v("Login"),
-            ]),
-            _vm._v(" "),
-            _c("label", [
-              _c("input", {
-                attrs: {
-                  type: "checkbox",
-                  checked: "checked",
-                  name: "remember",
-                },
-              }),
-              _vm._v(" Remember me\n    "),
-            ]),
-          ]),
-        ]
-      ),
+    return _c("div", { staticClass: "container" }, [
+      _c("label", { attrs: { for: "uname" } }, [_c("b", [_vm._v("Nom:")])]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: {
+          type: "text",
+          placeholder: "Entrer votre nom",
+          name: "uname",
+          required: "",
+        },
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "psw" } }, [
+        _c("b", [_vm._v("Mot de passe:")]),
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: {
+          type: "password",
+          placeholder: "Entrer votre mot de pass",
+          name: "psw",
+          required: "",
+        },
+      }),
+      _vm._v(" "),
+      _c("button", { staticClass: "loginButton", attrs: { type: "submit" } }, [
+        _vm._v("Login"),
+      ]),
+      _vm._v(" "),
+      _c("label", [
+        _c("input", {
+          attrs: { type: "checkbox", checked: "checked", name: "remember" },
+        }),
+        _vm._v("\n                Remember me\n            "),
+      ]),
     ])
   },
 ]
@@ -33250,170 +33301,207 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "vol45" }, [
+      _c("div", { staticClass: "vol4" }, [
+        _c("div", { staticClass: "grandimage" }, [
+          _c("img", {
+            attrs: { src: _vm.nftDetails.image, width: "400", height: "400" },
+          }),
+        ]),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "vol5" }, [
+        _c("h1", [_vm._v("attribute")]),
+        _vm._v(" "),
+        _c("table", [
+          _c("tr", [
+            _c("th", [_vm._v("Background")]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.nftDetails.lists.attribute))]),
+            _vm._v(" "),
+            _c("td", [_vm._v("....")]),
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _c("th", [_vm._v("Body")]),
+            _vm._v(" "),
+            _c("td"),
+            _vm._v(
+              "\n                    " +
+                _vm._s(_vm.nftDetails.lists.value) +
+                "\n                    "
+            ),
+            _c("td"),
+            _vm._v(" "),
+            _c("td", [_vm._v("....")]),
+          ]),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _vm._m(2),
+          _vm._v(" "),
+          _vm._m(3),
+          _vm._v(" "),
+          _vm._m(4),
+        ]),
+      ]),
+    ]),
+    _vm._v(" "),
+    _vm._m(5),
+  ])
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", [_c("h1", { staticClass: "h1" }, [_vm._v(" NFT'S NEWS")])]),
+    return _c("div", [_c("h1", { staticClass: "h1" }, [_vm._v("NFT'S NEWS")])])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("Clothing")]),
       _vm._v(" "),
-      _c("div", { staticClass: "vol45" }, [
-        _c("div", { staticClass: "vol4" }, [
-          _c("div", { staticClass: "grandimage" }),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "vol5" }, [
-          _c("h1", [_vm._v("attribute")]),
-          _vm._v(" "),
-          _c("table", [
-            _c("tr", [
-              _c("th", [_vm._v("backgound")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", [_vm._v("Body")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", [_vm._v("Clothing")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", [_vm._v("Face")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", [_vm._v("Hat")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("....")]),
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", [_vm._v("Attribute")]),
-              _vm._v(" "),
-              _c("td", { attrs: { colspan: "2" } }, [_vm._v("....")]),
-            ]),
-          ]),
-        ]),
-      ]),
+      _c("td", [_vm._v("....")]),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "footer", staticStyle: { "text-align": "center" } },
-        [
-          _c(
-            "a",
-            {
-              staticClass: "links",
-              attrs: {
-                href: "https://upcomingnft.art/",
-                title: "go to another website",
-              },
-            },
-            [_vm._v("upcomingnft")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "links",
-              attrs: {
-                href: "https://upcomingnft.art/",
-                title: "go to another website",
-              },
-            },
-            [_vm._v("upcomingnft")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "links",
-              attrs: {
-                href: "https://upcomingnft.art/",
-                title: "go to another website",
-              },
-            },
-            [_vm._v("upcomingnft")]
-          ),
-          _vm._v(" "),
-          _c(
-            "h6",
-            { staticStyle: { color: "white" }, attrs: { id: "contact" } },
-            [_vm._v("TELE:0622235308")]
-          ),
-          _vm._v(" "),
-          _c("br"),
-          _c("br"),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              attrs: {
-                href: "https://www.facebook.com/Emirates/",
-                title: "go to page facebook",
-              },
-            },
-            [
-              _c("img", {
-                staticClass: "rounded-circle",
-                staticStyle: {
-                  width: "20px",
-                  height: "20px",
-                  "margin-right": "2px",
-                  float: "left",
-                },
-                attrs: { src: "facebook.png" },
-              }),
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "links",
-              attrs: {
-                href: "mailto:arzamyasmine@gmail.com",
-                target: "_blank",
-              },
-            },
-            [
-              _c("img", {
-                staticClass: "rounded-circle",
-                staticStyle: {
-                  width: "20px",
-                  height: "20px",
-                  "margin-right": "2px",
-                  float: "left",
-                },
-                attrs: { src: "gmail.png", title: "go to our e-mail" },
-              }),
-            ]
-          ),
-        ]
-      ),
+      _c("td", [_vm._v("....")]),
     ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("Face")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("....")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("....")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("Hat")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("....")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("....")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("Attribute")]),
+      _vm._v(" "),
+      _c("td", { attrs: { colspan: "2" } }, [_vm._v("....")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "footer", staticStyle: { "text-align": "center" } },
+      [
+        _c(
+          "a",
+          {
+            staticClass: "links",
+            attrs: {
+              href: "https://upcomingnft.art/",
+              title: "go to another website",
+            },
+          },
+          [_vm._v("upcomingnft")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "links",
+            attrs: {
+              href: "https://upcomingnft.art/",
+              title: "go to another website",
+            },
+          },
+          [_vm._v("upcomingnft")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "links",
+            attrs: {
+              href: "https://upcomingnft.art/",
+              title: "go to another website",
+            },
+          },
+          [_vm._v("upcomingnft")]
+        ),
+        _vm._v(" "),
+        _c(
+          "h6",
+          { staticStyle: { color: "white" }, attrs: { id: "contact" } },
+          [_vm._v("TELE:0622235308")]
+        ),
+        _vm._v(" "),
+        _c("br"),
+        _c("br"),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            attrs: {
+              href: "https://www.facebook.com/Emirates/",
+              title: "go to page facebook",
+            },
+          },
+          [
+            _c("img", {
+              staticClass: "rounded-circle",
+              staticStyle: {
+                width: "20px",
+                height: "20px",
+                "margin-right": "2px",
+                float: "left",
+              },
+              attrs: { src: "facebook.png" },
+            }),
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "links",
+            attrs: { href: "mailto:arzamyasmine@gmail.com", target: "_blank" },
+          },
+          [
+            _c("img", {
+              staticClass: "rounded-circle",
+              staticStyle: {
+                width: "20px",
+                height: "20px",
+                "margin-right": "2px",
+                float: "left",
+              },
+              attrs: { src: "gmail.png", title: "go to our e-mail" },
+            }),
+          ]
+        ),
+      ]
+    )
   },
 ]
 render._withStripped = true

@@ -1,41 +1,51 @@
 <template>
     <div>
         <div class="topnav">
-         <router-link to="/"><img class="econ" src="https://nftreminder.io/assets/images/home.png" alt="Home">Home</router-link>
-         <router-link to="/RanckProject">RanckProject</router-link>
-         <a href="#contact">Contact us</a>
-          <!-- <router-link to="/login">Login</router-link> -->
-         <!-- <router-link to="/register">register</router-link> -->
-         <!-- <router-link to="/show">more information</router-link> -->
+             <a  style=" float: right; " class="d-inline-block" @click="isloginactive = !isloginactive">
+                Login
+            </a>
+            <router-link to="/register" style=" float: right; ">inscrire</router-link>
+            <router-link to="/"
+                ><img
+                    class="econ"
+                    src="https://nftreminder.io/assets/images/home.png"
+                    alt="Home"
+                />Home</router-link>
+
+            <router-link to="/RanckProject">RanckProject</router-link>
+            <a href="#contact">Contact us</a>
+             <form class="example">
+                    <input
+                        type="text"
+                        placeholder="Search.."
+                        name="search"
+                        v-model="search"
+                    />
+                    <button type="submit" @click.prevent.stop="searchFilter()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            
+           
+
+        <template v-if="isloginactive">
+            <login @close="isloginactive = false" />
+        </template>
         </div>
- 
-         <router-view></router-view>
-    
-         <!-- <router-link></router-link> -->
-         <!-- <p v-if="user == null"><button>Login</button></p>
-         <p v-if="user == null"><button>Register</button></p> -->
-         <!-- <login/>
-         <register/>
-         <home/> -->
-        
+        <router-view></router-view>
     </div>
 </template>
 <script>
-// import home from "./components/home.vue";
-// import login from "./components/login.vue";
-// import register from "./components/register.vue";
-
+import login from "./components/login.vue";
 export default {
     data() {
         return {
-            message: "NFT Project",
             user: null,
+            isloginactive: false,
         };
     },
-    components: {
-        // login,
-        // register,
-        // home
+    components: { 
+        login,
     },
     created() {
         this.getUser();
@@ -60,36 +70,35 @@ export default {
 };
 </script>
 
+
 <style>
 .topnav {
-  overflow: hidden;
-  background-color: #333;
-  position: relative;
-  top: 160px;
-
+    overflow: hidden;
+    background-color: #333;
+    padding: 10px;
+    /* position: relative;
+    top: 160px; */
 }
-.econ{
-    padding: 5;
-}
-
-
+/* .econ {
+    padding: 5px;
+} */
 
 .topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
 }
 
 .topnav a:hover {
-  background-color: #ddd;
-  color: black;
+    background-color: #ddd;
+    color: black;
 }
 
 .topnav a.active {
-  background-color: gray;
-  color: white;
+    background-color: gray;
+    color: white;
 }
 </style>
